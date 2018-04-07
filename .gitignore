@@ -1,2 +1,3 @@
 *.xls*
 .R*
+.Rproj.user

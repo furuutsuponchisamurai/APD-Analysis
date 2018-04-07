@@ -1,5 +1,6 @@
 #APD Cleaning
 # Google API Key AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo
+# register_google(key = "AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo")
 library(tidyverse)
 library(magrittr)
 library(nominatim)
@@ -61,7 +62,7 @@ getGeoDetails <- function(address){
     print("OVER QUERY LIMIT - Pausing for 1 hour at:") 
     time <- Sys.time()
     print(as.character(time))
-    Sys.sleep(60*60)
+    Sys.sleep(60*60*12)
     geo_reply = geocode(address, output='all', messaging=TRUE, override_limit=TRUE)
     answer$status <- geo_reply$status
   }
