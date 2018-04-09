@@ -7,6 +7,7 @@ library(nominatim)
 library(ggmap)
 library(maps)
 
+register_google(key = "AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo")
 apd = read_csv('APD_Data.csv')
 apd <- mutate(apd, Date= as.Date(Date, format= "%m/%d/%y"))
 apd <- mutate(apd, ADDRESS = ifelse(grepl("BLOCK", ADDRESS), str_c(str_replace(ADDRESS, " BLOCK", ""),", Austin, TX"), str_c(ADDRESS, ", Austin, TX")))
@@ -62,7 +63,7 @@ getGeoDetails <- function(address){
     print("OVER QUERY LIMIT - Pausing for 1 hour at:") 
     time <- Sys.time()
     print(as.character(time))
-    Sys.sleep(60*60*12)
+    Sys.sleep(60*60)
     geo_reply = geocode(address, output='all', messaging=TRUE, override_limit=TRUE)
     answer$status <- geo_reply$status
   }
