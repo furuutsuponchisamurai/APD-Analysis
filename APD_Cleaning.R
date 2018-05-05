@@ -1,4 +1,6 @@
  #APD Cleaning
+# Nominatim API KEY mapquest Qug7p0udpNTluLDS2033ZTHY3ZLSyt4G
+# Nominatim unwired labs key 9983ab451a6d49
 # Google API Key AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo
 # register_google(key = "AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo")
 library(tidyverse)
