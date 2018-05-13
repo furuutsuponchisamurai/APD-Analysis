@@ -2,24 +2,22 @@ library(tidyverse)
 library(reshape2)
 library(leaflet)
 library(jsonlite)
-data <- read_csv("geodata.csv")
-maxlat <- max(data$lat, na.rm=T)
-maxlong <- max(data$long, na.rm=T)
-minlat <- min(data$lat, na.rm=T)
-minlong <- min(data$long, na.rm=T)
 
 #register_google(key = "AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo")
-data <- read_csv("geodata.csv")
-clean_data <- data %>% filter(!is.na(long))
-aus_data <- filter(clean_data, -97.94 <= long, lat <=  30.52) %>% filter(long <= -97.56, 30.09 <= lat)
+data <- read_csv("APD-DATA-CLEAN.csv")
+clean_data <- data %>% filter(!is.na(LONGITUDE))
+austin_data <- filter(clean_data, -97.94 <= LONGITUDE, LATITUDE <=  30.52) %>% filter(LONGITUDE <= -97.56, 30.09 <= LATITUDE)
 
-geoJSON <- fromJSON("districts-processed-geoJSON.json")
+# geoJSON <- fromJSON("districts-processed-geoJSON.json")
 geojson <- readLines("austin-council-processed.geojson", warn = FALSE) %>%
   paste(collapse = "\n") %>%
   fromJSON(simplifyVector = FALSE)
 
-leaflet(aus_data) %>% setView(lng = -97.7341, lat = 30.2849, zoom = 10) %>%
+
+leaflet(austin_data) %>% setView(lng = -97.7341, lat = 30.2849, zoom = 10) %>%
   addTiles() %>% addGeoJSON(geojson) %>% addTiles() %>% addMarkers(clusterOptions = markerClusterOptions())
+
+
 # leaflet(aus_data) %>% addTiles() %>% addMarkers(clusterOptions = markerClusterOptions())
 
 # {

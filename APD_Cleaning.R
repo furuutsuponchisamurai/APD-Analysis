@@ -114,10 +114,10 @@ for (ii in seq(startindex, length(addresses))){
   saveRDS(geocoded, tempfile)
 }
 
-# distinct_addresses <- clean_distinct_addresses %>% 
-#   select(-n) %>% mutate(form_address = geodata$formatted_address, lat = geodata$lat, long = geodata$long)
+distinct_addresses <- clean_distinct_addresses %>%
+  select(-n) %>% mutate(form_address = geodata$formatted_address, lat = geodata$lat, long = geodata$long)
 # 
-# for (i in seq(20177, length(distinct_addresses$ADDRESS))){
+# for (i in seq(1, length(distinct_addresses$ADDRESS))){
 #   if (is.na(distinct_addresses$form_address[i])){
 #     print(paste("Working on index", i, "of", length(distinct_addresses$ADDRESS)))
 #     result <- getGeoData(distinct_addresses$ADDRESS[i])
@@ -127,5 +127,11 @@ for (ii in seq(startindex, length(addresses))){
 #     }
 # }
 
+cleaned_apd <- clean_apd %>%
+  select(-LOCATION_TYPE, -`Location 1`, -LONGITUDE, -LATITUDE) %>% 
+  mutate(LONGITUDE = distinct_addresses$long[match(ADDRESS, distinct_addresses$ADDRESS)],
+         LATITUDE = distinct_addresses$lat[match(ADDRESS, distinct_addresses$ADDRESS)],
+         FORMATTED_ADDRESS = distinct_addresses$form_address[match(ADDRESS, distinct_addresses$ADDRESS)])
 
+write_csv(cleaned_apd, "APD-DATA-CLEAN.csv")
 write_csv(geocoded, "geodata.csv")
