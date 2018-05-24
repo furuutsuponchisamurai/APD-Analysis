@@ -10,7 +10,7 @@ Created on Mon May  7 23:16:35 2018
 import pandas as pd, numpy as np, json, re
 
 df = pd.read_csv("city-council.csv")[['COUNCIL_DISTRICT','the_geom']]
-
+colours = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd']
 d1 = df['the_geom'][0]
 
 regex = r"(-[0-9]{2}\.[0-9]+)\s([0-9]{2}\.[0-9]+)"
@@ -32,8 +32,9 @@ def process(data):
     return result
 
 df = df.assign(**{'SHAPE': df.the_geom.apply(lambda x: x.split(" ", maxsplit=1)[0]), "SHAPE_DATA": df.the_geom.apply(lambda x: process(x))})
+#df = df.assign(**{'SHAPE': df.the_geom.apply(lambda x: x.split(" ", maxsplit=1)[0]), "SHAPE_DATA": df.the_geom.apply(lambda x: process(x)), "FILL_COLOUR": colours})
 
-def mkdict(_id, shape, coords):
+def mkdict(_id, shape, coords, colour=None):
     # Creates geoJson style dict needed for leaflet 
     
     shape = shape.lower()
@@ -53,6 +54,7 @@ districts = []
 
 for (idx, row) in df.iterrows():
     dct = mkdict(str(row.loc['COUNCIL_DISTRICT']), row.loc['SHAPE'], row.loc['SHAPE_DATA'])
+#    dct = mkdict(str(row.loc['COUNCIL_DISTRICT']), row.loc['SHAPE'], row.loc['SHAPE_DATA'], row.loc["FILL_COLOUR"])
     districts.append(dct)
     
 with open('austin-council-processed.geojson', 'w') as jsonfile:

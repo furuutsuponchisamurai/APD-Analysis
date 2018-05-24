@@ -1,15 +1,12 @@
  #APD Cleaning
-# Nominatim API KEY mapquest Qug7p0udpNTluLDS2033ZTHY3ZLSyt4G
-# Nominatim unwired labs key 9983ab451a6d49
-# Google API Key AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo
-# register_google(key = "AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo")
 library(tidyverse)
 library(magrittr)
 library(nominatim)
 library(ggmap)
 library(maps)
 
-register_google(key = "AIzaSyDoAf6cwt4aw_2iKxNN64C9tOeQ9ge8yMo")
+google = Sys.getenv("GOOGLE")
+register_google(key = google)
 apd = read_csv('APD_Data.csv')
 apd <- mutate(apd, Date= as.Date(Date, format= "%m/%d/%y"))
 apd <- mutate(apd, ADDRESS = ifelse(grepl("BLOCK", ADDRESS), str_c(str_replace(ADDRESS, " BLOCK", ""),", Austin, TX"), str_c(ADDRESS, ", Austin, TX")))
@@ -45,12 +42,6 @@ clean_distinct_addresses <- clean_apd %>% count(`ADDRESS`) %>% arrange(desc(n)) 
 #Robberies
 robberies <- filter(clean_apd, crime_cat == "BURGLARY")
 ggplot(data = robberies, mapping = aes(x = Time)) + geom_histogram(binwidth = 7200)
-
-#Geocoding?qmap
-#geocode("4100 GUADALUPE ST, Austin, TX")
-#locations <- osm_geocode(head(clean_distinct_addresses$ADDRESS, 10), key = getOption("OSM_API_KEY","Qug7p0udpNTluLDS2033ZTHY3ZLSyt4G"))
-#locations <- osm_geocode(mutiple_crimes$ADDRESS, key = getOption("OSM_API_KEY","Qug7p0udpNTluLDS2033ZTHY3ZLSyt4G"))
-#write_tsv(locations, "google_locations.tsv")
 
 #define a function that will process googles server responses for us.
 getGeoData <- function(address){   
