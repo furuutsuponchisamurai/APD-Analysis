@@ -41,21 +41,24 @@ def mkdict(_id, shape, coords, colour=None):
     s1, s2 = shape[0:5], shape[5:]
     shape = ''.join([s1.capitalize(), s2.capitalize()])
     dct = {"type": "Feature",
-           "properties": {"district_id": _id},
            "geometry": {"type": shape,
                         "coordinates": json.loads(coords)
-                        }
+                        },
+           "properties": {"district_id": _id}
            }
     
     
     return dct
 
-districts = []
+fcol = {"type": "FeatureCollection",
+    "features": []}
 
 for (idx, row) in df.iterrows():
     dct = mkdict(str(row.loc['COUNCIL_DISTRICT']), row.loc['SHAPE'], row.loc['SHAPE_DATA'])
 #    dct = mkdict(str(row.loc['COUNCIL_DISTRICT']), row.loc['SHAPE'], row.loc['SHAPE_DATA'], row.loc["FILL_COLOUR"])
-    districts.append(dct)
+    fcol["features"].append(dct)
+    
+
     
 with open('austin-council-processed.geojson', 'w') as jsonfile:
-    json.dump(districts, jsonfile)
+    json.dump(fcol, jsonfile)
