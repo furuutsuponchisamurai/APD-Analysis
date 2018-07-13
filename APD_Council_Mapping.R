@@ -26,6 +26,10 @@ austin_council_crimes <- bind_cols(austin_data, d_ids)
 district_crimes <- as_tibble(austin_council_crimes$district_id) %>% rename(district_id = value) %>% group_by(district_id) %>% summarise(n = length(district_id))
 ggf <- merge(gf, district_crimes)
 
+# Write council data to disk
+write_delim(ggf, "aggregate-council-crime-2016.tsv", "\t")
+write_delim(austin_council_crimes, "council-crime-2016.tsv", "\t")
+
 # Mapping
 plot(ggf["n"], border = 'black', axes = TRUE, key.pos=4)
 m <- mapview(ggf["n"], col.regions = sf.colors(10))

@@ -7,7 +7,8 @@ Created on Mon May  7 23:16:35 2018
 """
 #Create geoJSON for R leaflet app
 
-import pandas as pd, numpy as np, json, re
+import pandas as pd, numpy as np 
+import json, re, subprocess
 
 df = pd.read_csv("city-council.csv")[['COUNCIL_DISTRICT','the_geom']]
 colours = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd']
@@ -62,3 +63,7 @@ for (idx, row) in df.iterrows():
     
 with open('austin-council-processed.geojson', 'w') as jsonfile:
     json.dump(fcol, jsonfile)
+    
+subprocess.run(["geojson-rewind", "austin-council-processed.geojson", ">",  "austin-council-wound.geojson"])
+    
+    
